@@ -14,5 +14,6 @@ git clone https://github.com/VinPal5554/Sidescroller-Jump-Game.git
 **Open in Unity:**
 - You need Unity 2021.3+ installed
 - Open the project in Unity Hub
+
 **Play the Game:**
 - Press Play in the Unity Editor to start playing
