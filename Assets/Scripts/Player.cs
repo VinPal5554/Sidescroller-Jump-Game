@@ -4,13 +4,13 @@ using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class Player : MonoBehaviour
 {
     private Rigidbody playerRb;
     public float jumpForce = 10.0f;
     public float gravityMultiplier;
     public bool isOnGround = true;
-    public bool gameOver;
+    public bool isDead;
     private Animator playerAnim;
     public ParticleSystem explosionParticle;
     public ParticleSystem dirtParticle;
@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !gameOver)
+        if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !isDead)
         {
 
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -56,15 +56,22 @@ public class PlayerController : MonoBehaviour
 
         } else if (collision.gameObject.CompareTag("Obstacle"))
         {
-            gameOver = true;
+            isDead = true;
             Debug.Log("Game Over!");
             playerAnim.SetBool("Death_b", true);
             playerAnim.SetInteger("DeathType_int", 1);
             explosionParticle.Play();
             dirtParticle.Stop();
             playerAudio.PlayOneShot(crashSound, 1.0f);
+            StartCoroutine(EndGame());
         }
 
         
+    }
+
+    private IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(2f); 
+        GameManager.instance.SetupEndUI();
     }
 }
